@@ -52,6 +52,8 @@ Here are the Ubuntu packages that I installed that were used in the Jenkins Pipe
 
 1. **tidy** Ubuntu package used for linting HTML
 1. **docker** Ubuntu package used for building container
+1. **awscli** Ubuntu package used for issuing commands that interact with AWS
+1. **kubectl** Ubuntu package used to build **Kubernetes clusters**
 
 ## Additional Notes
 
