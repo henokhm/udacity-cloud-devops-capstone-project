@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: capstone-project
+  labels:
+    app: capstone-project
+spec:
+  selector:
+    matchLabels:
+      app: capstone-project
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  progressDeadlineSeconds: 1200
+  minReadySeconds: 60
+  template:
+    metadata:
+      labels:
+        app: capstone-project
+    spec:
+      terminationGracePeriodSeconds: 60
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: "app"
+                operator: In
+                values:
+                - capstone-project
+              - key: "temporary"
+                operator: In
+                values:
+                - "true"
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: udacity
+        image: henokhm/cloud-devops-capstone
+        command: [
+          "npm", "start"
+          ]
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: 64Mi
+            cpu: 250m
+          requests:
+            memory: 32Mi
+            cpu: 200m
+        ports:
+        - containerPort: 5000
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            scheme: HTTP
+            port: 5000
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 2
+          timeoutSeconds: 1
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: capstone-project
+spec:
+  type: LoadBalancer
+  selector:
+    app: capstone-project
+  ports:
+    - name: http
+      protocol: TCP
+      port: 5000
+      targetPort: 5000
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+      
+---
+kind: HorizontalPodAutoscaler
+apiVersion: autoscaling/v1
+metadata:
+  name: capstone-project
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: capstone-project
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: capstone-project
+  annotations:
+    ingress.kubernetes.io/force-ssl-redirect: "true"
+    kubernetes.io/ingress.class: "ingress-nginx"
+    #Limit app to my personal IP
+    #nginx.ingress.kubernetes.io/whitelist-source-range: "IP/32"
+
+spec:
+  rules:
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: capstone-project
+          servicePort: 80
