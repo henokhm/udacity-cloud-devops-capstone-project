@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: capstone-project
+  name: cloud-devops-capstone
   labels:
-    app: capstone-project
+    app: cloud-devops-capstone
 spec:
   selector:
     matchLabels:
-      app: capstone-project
+      app: cloud-devops-capstone
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -18,7 +18,7 @@ spec:
   template:
     metadata:
       labels:
-        app: capstone-project
+        app: cloud-devops-capstone
     spec:
       terminationGracePeriodSeconds: 60
       affinity:
@@ -29,7 +29,7 @@ spec:
               - key: "app"
                 operator: In
                 values:
-                - capstone-project
+                - cloud-devops-capstone
               - key: "temporary"
                 operator: In
                 values:
@@ -66,11 +66,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: capstone-project
+  name: cloud-devops-capstone
 spec:
   type: LoadBalancer
   selector:
-    app: capstone-project
+    app: cloud-devops-capstone
   ports:
     - name: http
       protocol: TCP
@@ -85,12 +85,12 @@ spec:
 kind: HorizontalPodAutoscaler
 apiVersion: autoscaling/v1
 metadata:
-  name: capstone-project
+  name: cloud-devops-capstone
 spec:
   scaleTargetRef:
     apiVersion: extensions/v1beta1
     kind: Deployment
-    name: capstone-project
+    name: cloud-devops-capstone
   minReplicas: 2
   maxReplicas: 5
   targetCPUUtilizationPercentage: 80
@@ -99,18 +99,18 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: capstone-project
+  name: cloud-devops-capstone
   annotations:
-    ingress.kubernetes.io/force-ssl-redirect: "true"
+    ingress.kubernetes.io/force-ssl-redirect: "false"
     kubernetes.io/ingress.class: "ingress-nginx"
     #Limit app to my personal IP
     #nginx.ingress.kubernetes.io/whitelist-source-range: "IP/32"
 
 spec:
   rules:
-    http:
+  - http:
       paths:
       - path: /
         backend:
-          serviceName: capstone-project
+          serviceName: cloud-devops-capstone
           servicePort: 80
