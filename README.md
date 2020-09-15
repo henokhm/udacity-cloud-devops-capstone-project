@@ -9,17 +9,37 @@ The primary purspose of this project is to create a Continuous Deployment Pipeli
 3. **DockerHub:** Used as container registry
 4. **AWS Elastic** Kubernetese Service (EKS): Used to deploy containerized application
 
-TODO: Other important points to include in README:
+## Jenkins
 
-- Jenkins plugins and summary of build stages
-  We need to add AWS and DockerHub user credentials to allow Jenkins server to perform container building and deployment. The AWS credential needs permission to create clusters on AWS Elastic Kubernetes Service.
-  Jenknins server AWS t2.micro EC2 instance.
-  Here are the Jenkins plugins I installed and used for this project:
-  **Blue Ocean:** for cleaner Jenkins user experience
-  **Pipeline: AWS Steps:** to enable Jenkins pipeline steps to interact with the AWS API
+I used an **AWS EC2 t2.micro** instance as my Jenkins server. I used several Jenkins plugins that were used at different build stages. First, I added my **AWS** and **DockerHub** user credentials. The **DockerHub** credential allowed the Jenkins server to pull an image from **DockerHub**. The AWS credential allowed it to do the deployment. The AWS credential needs permission to create clusters on AWS Elastic Kubernetes Service.
 
-  **tidy** Ubuntu package used for linting HTML
-  **docker** Ubuntu package used for building container
+Here are the Jenkins plugins I installed and used for this project:
+
+1. **Blue Ocean:** for cleaner Jenkins user experience
+1. **Pipeline: AWS Steps:** to enable Jenkins pipeline steps to interact with the AWS API
+
+Here are the Ubuntu packages that I installed that were used in the Jenkins Pipeline:
+
+1. **tidy** Ubuntu package used for linting HTML
+1. **docker** Ubuntu package used for building container
+
+## eksctl
+
+I used an **AWS Cloud9** instance to run the following command that create an **AWS EKS** (Elastic Kubernetes Service) Cluster.
+
+<pre><b>eksctl create cluster</b> \
+      --name <b>cloud-devops-capstone</b>\
+      --version <b>1.16</b>\
+      --nodegroup-name <b>workers</b>\
+      --node-type <b>t2.medium</b>\
+      --nodes <b>3</b>\
+      --nodes-min <b>1</b>\
+      --nodes-max <b>4</b>\
+      --node-ami <b>auto</b>\
+      --region <b>us-east-2</b>
+</pre>
+
+**_Note_**: **AWS Cloud9** didn't come with **eksctl** installed, and thus I had to install it myself.
 
 - Zero downtime rolling updates
 - NodeJS app used https://github.com/heroku/node-js-getting-started
