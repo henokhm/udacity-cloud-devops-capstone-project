@@ -15,7 +15,6 @@ TODO: Other important points to include in README:
   Jenknins server AWS t2.micro EC2 instance.
   Here are the Jenkins plugins I installed and used for this project:
   **Blue Ocean:** for cleaner Jenkins user experience
-  **Aqua Security's MicroScanner:** to check DOcker container images for vulnerabilities
   **Pipeline: AWS Steps:** to enable Jenkins pipeline steps to interact with the AWS API
 
 - Zero downtime rolling updates
