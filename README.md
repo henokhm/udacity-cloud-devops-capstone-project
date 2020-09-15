@@ -7,7 +7,7 @@ The primary purspose of this project is to create a Continuous Deployment Pipeli
 1. **Jenkins:** Used to setup CI/CD Pipeline
 2. **Docker:** Used to containerize the NodeJS app
 3. **DockerHub:** Used as container registry
-4. **AWS Elastic** Kubernetese Service (EKS): Used to deploy containerized application
+4. **AWS Elastic Kubernetese Service (EKS):** Used to deploy containerized application
 
 ## Jenkins
 
@@ -40,6 +40,10 @@ I used an **AWS Cloud9** instance to run the following command that create an **
 </pre>
 
 **_Note_**: **AWS Cloud9** didn't come with **eksctl** installed, and thus I had to install it myself.
+
+## Docker
+
+The next step was to _containerized_ my **NodeJS** application. For this, I had to create a **Dockerfile**. I used the official **NodeJS image from DockerHub**. After I built and run my container, I pushed it to DockerHub using a bash script.
 
 - Zero downtime rolling updates
 - NodeJS app used https://github.com/heroku/node-js-getting-started
