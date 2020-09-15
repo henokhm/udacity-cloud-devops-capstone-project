@@ -12,10 +12,14 @@ The primary purspose of this project is to create a Continuous Deployment Pipeli
 TODO: Other important points to include in README:
 
 - Jenkins plugins and summary of build stages
+  We need to add AWS and DockerHub user credentials to allow Jenkins server to perform container building and deployment. The AWS credential needs permission to create clusters on AWS Elastic Kubernetes Service.
   Jenknins server AWS t2.micro EC2 instance.
   Here are the Jenkins plugins I installed and used for this project:
   **Blue Ocean:** for cleaner Jenkins user experience
   **Pipeline: AWS Steps:** to enable Jenkins pipeline steps to interact with the AWS API
+
+  **tidy** Ubuntu package used for linting HTML
+  **docker** Ubuntu package used for building container
 
 - Zero downtime rolling updates
 - NodeJS app used https://github.com/heroku/node-js-getting-started
