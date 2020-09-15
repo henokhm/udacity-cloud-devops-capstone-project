@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cloud-devops-capstone
+  name: capstone-project
   labels:
-    app: cloud-devops-capstone
+    app: capstone-project
 spec:
   selector:
     matchLabels:
-      app: cloud-devops-capstone
+      app: capstone-project
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -18,7 +18,7 @@ spec:
   template:
     metadata:
       labels:
-        app: cloud-devops-capstone
+        app: capstone-project
     spec:
       terminationGracePeriodSeconds: 60
       affinity:
@@ -29,7 +29,7 @@ spec:
               - key: "app"
                 operator: In
                 values:
-                - cloud-devops-capstone
+                - capstone-project
               - key: "temporary"
                 operator: In
                 values:
@@ -39,7 +39,7 @@ spec:
       - name: udacity
         image: henokhm/cloud-devops-capstone
         command: [
-          "npm", "start"
+          "npm","start"
           ]
         imagePullPolicy: Always
         resources:
@@ -66,31 +66,31 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: cloud-devops-capstone
+  name: capstone-project
 spec:
   type: LoadBalancer
   selector:
-    app: cloud-devops-capstone
+    app: capstone-project
   ports:
     - name: http
       protocol: TCP
       port: 5000
       targetPort: 5000
-    - name: http
+    - name: https
       protocol: TCP
-      port: 80
-      targetPort: 80
-      
+      port: 443
+      targetPort: 443
+
 ---
 kind: HorizontalPodAutoscaler
 apiVersion: autoscaling/v1
 metadata:
-  name: cloud-devops-capstone
+  name: capstone-project
 spec:
   scaleTargetRef:
     apiVersion: extensions/v1beta1
     kind: Deployment
-    name: cloud-devops-capstone
+    name: capstone-project
   minReplicas: 2
   maxReplicas: 5
   targetCPUUtilizationPercentage: 80
@@ -99,9 +99,9 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: cloud-devops-capstone
+  name: capstone-project
   annotations:
-    ingress.kubernetes.io/force-ssl-redirect: "false"
+    ingress.kubernetes.io/force-ssl-redirect: "true"
     kubernetes.io/ingress.class: "ingress-nginx"
     #Limit app to my personal IP
     #nginx.ingress.kubernetes.io/whitelist-source-range: "IP/32"
@@ -112,5 +112,5 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: cloud-devops-capstone
+          serviceName: capstone-project
           servicePort: 80
